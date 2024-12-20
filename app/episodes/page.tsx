@@ -11,16 +11,16 @@ export default function EpisodesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Episodes</h1>
+        <h1 className="text-3xl font-bold">Time Logger</h1>
         <Button onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Cancel" : "Log New Episode"}
+          {showForm ? "Cancel" : "Log Time"}
         </Button>
       </div>
 
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>Log New Episode</CardTitle>
+            <CardTitle>Log Editing Time</CardTitle>
           </CardHeader>
           <CardContent>
             <EpisodeForm />
@@ -28,7 +28,7 @@ export default function EpisodesPage() {
         </Card>
       )}
 
-      {/* Episodes list will go here */}
+      {/* Time logs list will go here */}
     </div>
   );
 } 

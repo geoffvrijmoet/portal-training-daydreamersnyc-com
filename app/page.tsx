@@ -1,7 +1,10 @@
+'use client';
+
+import { EpisodeForm } from "@/components/episode-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, DollarSign, Headphones, Users } from "lucide-react";
 
-export default async function HomePage() {
+export default function HomePage() {
   // TODO: Replace with real data from MongoDB
   const stats = {
     activeClients: 4,
@@ -12,8 +15,17 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">Time Logger</h1>
       
+      <Card>
+        <CardHeader>
+          <CardTitle>Log Editing Time</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <EpisodeForm />
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
