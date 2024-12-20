@@ -9,8 +9,8 @@ export default function SignInPage() {
       <div className="w-full max-w-md mb-8">
         <div className="relative h-[100px] w-full">
           <Image
-            src="/images/daydreamers-dog-training-logo.webp"
-            alt="Daydreamers Dog Training"
+            src="/images/geoff-vrijmoet-podcasts-logo.webp"
+            alt="Geoff Vrijmoet Podcasts Admin"
             fill
             className="object-contain"
             priority
