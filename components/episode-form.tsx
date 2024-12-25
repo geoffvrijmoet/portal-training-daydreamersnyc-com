@@ -52,12 +52,14 @@ type TimeLogFormData = {
   date: string;
   note: string;
   paymentMethod: 'Venmo' | 'PayPal' | '';
+  isInvoiced: boolean;
 };
 
 type NewEpisodeData = {
   podcastName: string;
   episodeTitle: string;
   episodeType: string;
+  isInvoiced: boolean;
   date: string;
 };
 
@@ -70,6 +72,7 @@ export function EpisodeForm() {
     podcastName: "",
     episodeTitle: "",
     episodeType: "Podcast",
+    isInvoiced: false,
     date: new Date().toISOString().split('T')[0],
   });
   const [formData, setFormData] = useState<TimeLogFormData>({
@@ -90,6 +93,7 @@ export function EpisodeForm() {
     date: new Date().toISOString().split('T')[0],
     note: "",
     paymentMethod: 'Venmo',
+    isInvoiced: false,
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -110,6 +114,11 @@ export function EpisodeForm() {
       setFetchingEpisodes(false);
     }
   }
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+  };
 
   const handleNewEpisodeSubmit = async () => {
     try {
@@ -134,7 +143,7 @@ export function EpisodeForm() {
             editingSeconds: 0,
             billableHours: 0,
             runningHourlyTotal: 0,
-            dateInvoiced: newEpisode.date,
+            dateInvoiced: newEpisode.isInvoiced ? formatDate(newEpisode.date) : '',
             datePaid: "",
             note: "",
             ratePerMinute: 0
@@ -151,6 +160,7 @@ export function EpisodeForm() {
         podcastName: "", 
         episodeTitle: "", 
         episodeType: "Podcast",
+        isInvoiced: false,
         date: new Date().toISOString().split('T')[0]
       });
     } catch (error) {
@@ -279,7 +289,7 @@ export function EpisodeForm() {
         earnedAfterFees,
         runningHourlyTotal,
         ratePerMinute,
-        dateInvoiced: formData.date,
+        dateInvoiced: formData.isInvoiced ? formatDate(formData.date) : '',
         note: formData.note,
         paymentMethod: formData.paymentMethod
       };
@@ -314,6 +324,7 @@ export function EpisodeForm() {
         date: new Date().toISOString().split('T')[0],
         note: "",
         paymentMethod: 'Venmo',
+        isInvoiced: false,
       });
 
       // Refresh episodes list
@@ -416,6 +427,7 @@ export function EpisodeForm() {
         date: new Date().toISOString().split('T')[0],
         note: "",
         paymentMethod: 'Venmo',
+        isInvoiced: false,
       });
       await fetchEpisodes();
 
@@ -706,13 +718,33 @@ export function EpisodeForm() {
           </div>
 
           <div className="space-y-4">
-            <Label>Date</Label>
-            <Input
-              type="date"
-              value={formData.date}
-              onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
-              className="w-[200px]"
-            />
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="isInvoiced"
+                checked={formData.isInvoiced}
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  isInvoiced: e.target.checked 
+                }))}
+                className="h-4 w-4"
+              />
+              <Label htmlFor="isInvoiced" className="text-sm font-normal">
+                This episode has been invoiced
+              </Label>
+            </div>
+
+            {formData.isInvoiced && (
+              <div className="space-y-2">
+                <Label>Date Invoiced</Label>
+                <Input
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
+                  className="w-[200px]"
+                />
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -806,16 +838,6 @@ export function EpisodeForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>Date</Label>
-              <Input
-                type="date"
-                value={newEpisode.date}
-                onChange={(e) => setNewEpisode({ ...newEpisode, date: e.target.value })}
-                className="w-full"
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label>Episode Type</Label>
               <Select
                 value={newEpisode.episodeType}
@@ -830,6 +852,34 @@ export function EpisodeForm() {
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="newEpisodeInvoiced"
+                checked={newEpisode.isInvoiced}
+                onChange={(e) => setNewEpisode(prev => ({ 
+                  ...prev, 
+                  isInvoiced: e.target.checked 
+                }))}
+                className="h-4 w-4"
+              />
+              <Label htmlFor="newEpisodeInvoiced" className="text-sm font-normal">
+                This episode has been invoiced
+              </Label>
+            </div>
+
+            {newEpisode.isInvoiced && (
+              <div className="space-y-2">
+                <Label>Date Invoiced</Label>
+                <Input
+                  type="date"
+                  value={newEpisode.date}
+                  onChange={(e) => setNewEpisode(prev => ({ ...prev, date: e.target.value }))}
+                  className="w-full"
+                />
+              </div>
+            )}
 
             <Button 
               onClick={handleNewEpisodeSubmit} 
