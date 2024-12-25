@@ -58,6 +58,7 @@ type NewEpisodeData = {
   podcastName: string;
   episodeTitle: string;
   episodeType: string;
+  date: string;
 };
 
 export function EpisodeForm() {
@@ -68,7 +69,8 @@ export function EpisodeForm() {
   const [newEpisode, setNewEpisode] = useState<NewEpisodeData>({
     podcastName: "",
     episodeTitle: "",
-    episodeType: "Podcast"
+    episodeType: "Podcast",
+    date: new Date().toISOString().split('T')[0],
   });
   const [formData, setFormData] = useState<TimeLogFormData>({
     episodeId: "",
@@ -118,6 +120,8 @@ export function EpisodeForm() {
         body: JSON.stringify({
           episode: {
             ...newEpisode,
+            client: newEpisode.podcastName,
+            type: newEpisode.episodeType,
             earnedAfterFees: 0,
             invoicedAmount: 0,
             billedMinutes: 0,
@@ -130,9 +134,10 @@ export function EpisodeForm() {
             editingSeconds: 0,
             billableHours: 0,
             runningHourlyTotal: 0,
-            dateInvoiced: "",
+            dateInvoiced: newEpisode.date,
             datePaid: "",
-            note: ""
+            note: "",
+            ratePerMinute: 0
           },
         }),
       });
@@ -142,7 +147,12 @@ export function EpisodeForm() {
       // Refresh episodes list
       await fetchEpisodes();
       setShowNewEpisodeDialog(false);
-      setNewEpisode({ podcastName: "", episodeTitle: "", episodeType: "Podcast" });
+      setNewEpisode({ 
+        podcastName: "", 
+        episodeTitle: "", 
+        episodeType: "Podcast",
+        date: new Date().toISOString().split('T')[0]
+      });
     } catch (error) {
       console.error("Error creating episode:", error);
     } finally {
@@ -792,6 +802,16 @@ export function EpisodeForm() {
                 value={newEpisode.episodeTitle}
                 onChange={(e) => setNewEpisode({ ...newEpisode, episodeTitle: e.target.value })}
                 placeholder="e.g., 506 - Gil Gayle"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Date</Label>
+              <Input
+                type="date"
+                value={newEpisode.date}
+                onChange={(e) => setNewEpisode({ ...newEpisode, date: e.target.value })}
+                className="w-full"
               />
             </div>
 
