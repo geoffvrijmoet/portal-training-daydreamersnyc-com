@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getSheetData, updateSheetData, appendSheetData } from '@/lib/google-sheets';
 import { auth } from '@clerk/nextjs/server';
+import { google } from 'googleapis';
+import { getAuthToken } from '@/lib/google-sheets';
 
 // Update type to match our spreadsheet columns
 type Episode = {

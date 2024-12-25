@@ -195,7 +195,7 @@ export function EpisodeForm() {
         };
         
         console.log('Setting form data to:', newFormData);
-        setFormData(prev => newFormData);
+        setFormData(newFormData);
         updateDefaultRates(selectedEpisode.client);
       }
     }
@@ -206,7 +206,7 @@ export function EpisodeForm() {
       (acc, entry) => {
         let totalSeconds = acc.seconds + entry.seconds;
         let totalMinutes = acc.minutes + entry.minutes + Math.floor(totalSeconds / 60);
-        let totalHours = acc.hours + entry.hours + Math.floor(totalMinutes / 60);
+        const totalHours = acc.hours + entry.hours + Math.floor(totalMinutes / 60);
         
         totalSeconds = totalSeconds % 60;
         totalMinutes = totalMinutes % 60;
@@ -539,6 +539,17 @@ export function EpisodeForm() {
                       />
                     </div>
                   </div>
+                  {index > 0 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeLengthEntry(index)}
+                      className="text-red-500"
+                    >
+                      Remove
+                    </Button>
+                  )}
                 </div>
               ))}
 

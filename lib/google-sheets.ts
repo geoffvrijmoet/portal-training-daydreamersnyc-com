@@ -7,7 +7,7 @@ const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n')
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
 
-async function getAuthToken() {
+export async function getAuthToken() {
   const auth = new JWT({
     email: GOOGLE_CLIENT_EMAIL,
     key: GOOGLE_PRIVATE_KEY,
@@ -93,7 +93,31 @@ export async function getSheetData(range: string) {
   }
 }
 
-export async function updateSheetData(rowIndex: number, values: any[]) {
+// Add this interface at the top of the file
+interface SheetRow {
+  client: string;
+  episodeTitle: string;
+  type: string;
+  earnedAfterFees: number;
+  invoicedAmount: number;
+  billedMinutes: number;
+  lengthHours: number;
+  lengthMinutes: number;
+  lengthSeconds: number;
+  paymentMethod: string;
+  editingHours: number;
+  editingMinutes: number;
+  editingSeconds: number;
+  billableHours: number;
+  runningHourlyTotal: number;
+  ratePerMinute: number;
+  dateInvoiced: string;
+  datePaid: string;
+  note: string;
+}
+
+// Update function signatures
+export async function updateSheetData(rowIndex: number, values: SheetRow) {
   try {
     const columns = await getColumnIndices();
     const auth = await getAuthToken();
@@ -124,7 +148,7 @@ export async function updateSheetData(rowIndex: number, values: any[]) {
   }
 }
 
-export async function appendSheetData(values: any[]) {
+export async function appendSheetData(values: SheetRow) {
   try {
     const columns = await getColumnIndices();
     const auth = await getAuthToken();
