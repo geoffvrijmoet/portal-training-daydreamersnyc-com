@@ -42,6 +42,7 @@ type ColumnMap = {
 // Add this function to get column indices
 async function getColumnIndices(): Promise<ColumnMap> {
   const headers = await getSheetData('Sheet1!1:1');
+  console.log('Sheet headers:', headers?.[0]);
   if (!headers?.[0]) throw new Error('Could not find headers in spreadsheet');
 
   const headerRow = headers[0];
