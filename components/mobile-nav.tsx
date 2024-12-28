@@ -14,7 +14,9 @@ export function MobileNav({ className }: { className?: string }) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-80">
-        <MainNav className="flex flex-col items-start space-x-0 space-y-4" />
+        <div className="flex flex-col space-y-4">
+          <MainNav className="flex flex-col items-start space-x-0 space-y-2" />
+        </div>
       </SheetContent>
     </Sheet>
   );
