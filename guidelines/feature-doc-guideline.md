@@ -18,7 +18,7 @@ Use this guide to build a web app that allows me to manage my freelance podcast 
 This is the reference documentation for Clerk: https://clerk.com/docs/references/nextjs/
 
 # Current File Structure
-📁 PODCASTS-GEOFFVRIJMOET-COM-BACKEND
+📁 NEXT-SHADCN-TEMPLATE
 ├── 📁 app
 │   ├── 📁 fonts
 │   ├── ⭐ favicon.ico
