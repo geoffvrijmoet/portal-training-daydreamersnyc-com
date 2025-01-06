@@ -21,7 +21,7 @@ export function WelcomeCard() {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground font-quicksand">
-          Below you'll find report cards from past training sessions and other resources.
+          Below you&aposll find report cards from past training sessions and other resources.
         </p>
       </CardContent>
     </Card>
