@@ -1,24 +1,29 @@
 "use client"
 
 import { useUser } from "@clerk/nextjs"
-import { redirect } from "next/navigation"
+import { WelcomeCard } from "@/components/dashboard/welcome-card"
+import { RecentReportCards } from "@/components/dashboard/recent-report-cards"
+import { QuickResources } from "@/components/dashboard/quick-resources"
+import { useEffect, useState } from "react"
 
 export default function HomePage() {
   const { isSignedIn } = useUser()
+  const [isMounted, setIsMounted] = useState(false)
 
-  if (isSignedIn) {
-    redirect("/dashboard")
-  }
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-12 text-center">
-      <h1 className="text-4xl font-fredoka font-light tracking-tight mb-4">
-        Welcome to Daydreamers Dog Training Portal
-      </h1>
-      <p className="text-xl text-muted-foreground mb-8 max-w-2xl font-quicksand">
-        Access your training materials, report cards, and resources all in one place.
-        Sign in to get started.
-      </p>
+    <div 
+      className={`space-y-6 transition-all duration-500
+        ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+    >
+      <WelcomeCard />
+      <div className="grid gap-6 md:grid-cols-2">
+        <RecentReportCards />
+        <QuickResources />
+      </div>
     </div>
   )
 }

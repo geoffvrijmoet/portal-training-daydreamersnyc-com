@@ -4,16 +4,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useUser } from "@clerk/nextjs"
 
 export function WelcomeCard() {
-  const { user } = useUser()
+  const { user, isLoaded } = useUser()
   
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-fredoka font-light">Welcome back, {user?.firstName || 'Friend'}!</CardTitle>
+        <CardTitle className="font-fredoka font-light">
+          Welcome back, {" "}
+          <span 
+            className={`inline-block transition-all duration-500 delay-[50ms] transform
+              ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+          >
+            {isLoaded ? user?.firstName || 'Friend' : 'Friend'}!
+          </span>
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground font-quicksand">
-          Access your training materials, report cards, and resources all in one place.
+          Below you'll find report cards from past training sessions and other resources.
         </p>
       </CardContent>
     </Card>
