@@ -1,16 +1,15 @@
 'use client';
 
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Clock, Users } from "lucide-react";
 
 export default function HomePage() {
-  const [stats, setStats] = useState({
+  const stats = {
     metric1: 42,
     metric2: 128,
     metric3: 24.5,
     metric4: 8
-  });
+  };
 
   return (
     <div className="space-y-8">
