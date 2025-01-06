@@ -1,11 +1,56 @@
 import { ClerkProvider } from '@clerk/nextjs'
-import { Inter } from 'next/font/google'
-import { UserButton } from "@clerk/nextjs";
-import { MainNav } from "@/components/main-nav";
-import { MobileNav } from "@/components/mobile-nav";
+import { UserButton } from "@clerk/nextjs"
+import { MainNav } from "@/components/main-nav"
+import { MobileNav } from "@/components/mobile-nav"
+import localFont from 'next/font/local'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const fredoka = localFont({
+  src: [
+    {
+      path: './fonts/Fredoka-Light.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Fredoka-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Fredoka-Medium.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Fredoka-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-fredoka',
+})
+
+const quicksand = localFont({
+  src: [
+    {
+      path: './fonts/Quicksand-Light.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Quicksand-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Quicksand-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-quicksand',
+})
 
 export default function RootLayout({
   children,
@@ -14,8 +59,8 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
+      <html lang="en" className={`${fredoka.variable} ${quicksand.variable}`}>
+        <body className={quicksand.className}>
           <div className="flex min-h-screen flex-col">
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <div className="container flex h-14 items-center">
