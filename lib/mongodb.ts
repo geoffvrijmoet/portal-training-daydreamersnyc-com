@@ -50,22 +50,20 @@ export interface Client {
 export interface ReportCard {
   _id: string
   clientId: string
+  clientName: string
   dogName: string
   date: Date
   title: string
   description: string
   content: string
-  trainingGoals: string[]
-  progress: {
-    [key: string]: number
-  }
+  selectedItems: Array<{
+    category: string
+    items: Array<{
+      title: string
+      description: string
+    }>
+  }>
   productRecommendations: string[]
-  nextSteps: string[]
-  attachments?: {
-    type: 'video' | 'image' | 'document'
-    url: string
-    title: string
-  }[]
   createdAt: Date
   updatedAt: Date
 } 
