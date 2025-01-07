@@ -13,6 +13,7 @@ interface ProductRecommendation {
   title: string
   url: string
   imageUrl?: string
+  price?: string
 }
 
 // Client-side cache
@@ -92,18 +93,25 @@ export function QuickResources() {
       for (const productName of recommendedProducts) {
         const url = productUrls[productName]
         try {
-          // Fetch product image
-          const response = await fetch(`/api/product-image?url=${encodeURIComponent(url)}`)
-          const data = await response.json()
+          // Fetch product image and price in parallel
+          const [imageResponse, priceResponse] = await Promise.all([
+            fetch(`/api/product-image?url=${encodeURIComponent(url)}`),
+            fetch(`/api/product-price?url=${encodeURIComponent(url)}`)
+          ])
+          const [imageData, priceData] = await Promise.all([
+            imageResponse.json(),
+            priceResponse.json()
+          ])
 
           newRecommendations.push({
             title: productName,
             url,
-            imageUrl: data.imageUrl
+            imageUrl: imageData.imageUrl,
+            price: priceData.price ? `$${priceData.price}` : undefined
           })
         } catch (error) {
-          console.error('Error fetching product image:', error)
-          // Add the product even without an image
+          console.error('Error fetching product data:', error)
+          // Add the product even without an image/price
           newRecommendations.push({
             title: productName,
             url,
@@ -165,6 +173,11 @@ export function QuickResources() {
                 <span className="text-sm font-fredoka font-light line-clamp-2">
                   {product.title}
                 </span>
+                {product.price && (
+                  <span className="text-sm text-muted-foreground font-quicksand mt-1">
+                    {product.price}
+                  </span>
+                )}
               </Link>
             ))}
           </div>
