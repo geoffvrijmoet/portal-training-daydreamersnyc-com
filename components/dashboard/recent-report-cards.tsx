@@ -4,21 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FileText } from "lucide-react"
 import Link from "next/link"
+import { useReportCards } from "@/hooks/use-report-cards"
 
 export function RecentReportCards() {
-  // This will be replaced with actual data fetching
-  const mockReportCards = [
-    {
-      id: 1,
-      date: "2024-01-05",
-      title: "Training Session #1",
-    },
-    {
-      id: 2,
-      date: "2024-01-03",
-      title: "Training Session #2",
-    },
-  ]
+  const { reportCards, isLoading, error } = useReportCards()
+
+  // Get only the 3 most recent report cards
+  const recentReportCards = reportCards?.slice(0, 3)
 
   return (
     <Card>
@@ -30,21 +22,29 @@ export function RecentReportCards() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {mockReportCards.map((report) => (
-            <Link 
-              key={report.id}
-              href={`/report-cards/${report.id}`}
-              className="flex items-center space-x-4 rounded-lg border p-4 transition-colors hover:bg-muted"
-            >
-              <FileText className="h-6 w-6 text-primary" />
-              <div className="flex-1 space-y-1">
-                <p className="font-fredoka font-light leading-none">{report.title}</p>
-                <p className="text-sm text-muted-foreground font-quicksand">
-                  {new Date(report.date).toLocaleDateString()}
-                </p>
-              </div>
-            </Link>
-          ))}
+          {isLoading ? (
+            <p className="text-muted-foreground font-quicksand">Loading report cards...</p>
+          ) : error ? (
+            <p className="text-red-500 font-quicksand">Error loading report cards</p>
+          ) : recentReportCards?.length === 0 ? (
+            <p className="text-muted-foreground font-quicksand">No report cards found.</p>
+          ) : (
+            recentReportCards?.map((report) => (
+              <Link 
+                key={report._id}
+                href={`/report-cards/${report._id}`}
+                className="flex items-center space-x-4 rounded-lg border p-4 transition-colors hover:bg-muted"
+              >
+                <FileText className="h-6 w-6 text-primary" />
+                <div className="flex-1 space-y-1">
+                  <p className="font-fredoka font-light leading-none">{report.title}</p>
+                  <p className="text-sm text-muted-foreground font-quicksand">
+                    {new Date(report.date).toLocaleDateString()}
+                  </p>
+                </div>
+              </Link>
+            ))
+          )}
         </div>
       </CardContent>
     </Card>

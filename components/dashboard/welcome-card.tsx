@@ -12,7 +12,7 @@ export function WelcomeCard() {
         <CardTitle className="font-fredoka font-light">
           Welcome back, {" "}
           <span 
-            className={`inline-block transition-all duration-500 delay-[50ms] transform
+            className={`inline-block transition-all duration-500 transform
               ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
           >
             {isLoaded ? user?.firstName || 'Friend' : 'Friend'}!

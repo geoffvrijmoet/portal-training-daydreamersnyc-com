@@ -17,39 +17,35 @@ import {
 } from "@/components/ui/select"
 import { FileText } from "lucide-react"
 import Link from "next/link"
+import { useReportCards } from "@/hooks/use-report-cards"
 
 export function ReportCardList() {
   const [search, setSearch] = React.useState("")
   const [sortBy, setSortBy] = React.useState("newest")
+  const { reportCards, isLoading, error } = useReportCards()
 
-  // This will be replaced with actual data fetching
-  const mockReportCards = [
-    {
-      id: 1,
-      date: "2024-01-05",
-      title: "Training Session #1",
-      description: "Basic obedience and leash training",
-    },
-    {
-      id: 2,
-      date: "2024-01-03",
-      title: "Training Session #2",
-      description: "Advanced commands and socialization",
-    },
-    // Add more mock data as needed
-  ]
+  const filteredReportCards = React.useMemo(() => {
+    return (reportCards || [])
+      .filter((report) =>
+        report.title.toLowerCase().includes(search.toLowerCase()) ||
+        report.description?.toLowerCase().includes(search.toLowerCase())
+      )
+      .sort((a, b) => {
+        const dateA = new Date(a.date).getTime()
+        const dateB = new Date(b.date).getTime()
+        return sortBy === "newest" ? dateB - dateA : dateA - dateB
+      })
+  }, [reportCards, search, sortBy])
 
-  const filteredReportCards = mockReportCards
-    .filter((report) =>
-      report.title.toLowerCase().includes(search.toLowerCase()) ||
-      report.description.toLowerCase().includes(search.toLowerCase())
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <p className="text-red-500 font-quicksand">Error loading report cards: {error}</p>
+        </CardContent>
+      </Card>
     )
-    .sort((a, b) => {
-      if (sortBy === "newest") {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      }
-      return new Date(a.date).getTime() - new Date(b.date).getTime()
-    })
+  }
 
   return (
     <Card>
@@ -75,24 +71,30 @@ export function ReportCardList() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {filteredReportCards.map((report) => (
-            <Link
-              key={report.id}
-              href={`/report-cards/${report.id}`}
-              className="flex items-center space-x-4 rounded-lg border p-4 transition-colors hover:bg-muted"
-            >
-              <FileText className="h-6 w-6 text-primary" />
-              <div className="flex-1 space-y-1">
-                <p className="font-fredoka font-light leading-none">{report.title}</p>
-                <p className="text-sm text-muted-foreground font-quicksand">
-                  {report.description}
-                </p>
-                <p className="text-sm text-muted-foreground font-quicksand">
-                  {new Date(report.date).toLocaleDateString()}
-                </p>
-              </div>
-            </Link>
-          ))}
+          {isLoading ? (
+            <p className="text-muted-foreground font-quicksand">Loading report cards...</p>
+          ) : filteredReportCards.length === 0 ? (
+            <p className="text-muted-foreground font-quicksand">No report cards found.</p>
+          ) : (
+            filteredReportCards.map((report) => (
+              <Link
+                key={report._id}
+                href={`/report-cards/${report._id}`}
+                className="flex items-center space-x-4 rounded-lg border p-4 transition-colors hover:bg-muted"
+              >
+                <FileText className="h-6 w-6 text-primary" />
+                <div className="flex-1 space-y-1">
+                  <p className="font-fredoka font-light leading-none">{report.title}</p>
+                  <p className="text-sm text-muted-foreground font-quicksand">
+                    {report.description}
+                  </p>
+                  <p className="text-sm text-muted-foreground font-quicksand">
+                    {new Date(report.date).toLocaleDateString()}
+                  </p>
+                </div>
+              </Link>
+            ))
+          )}
         </div>
       </CardContent>
     </Card>
